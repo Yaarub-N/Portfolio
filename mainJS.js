@@ -28,6 +28,20 @@ const languageStatus = document.querySelector("[data-language-status]");
 const progressBar = document.querySelector(".page-progress span");
 const mobileMenuQuery = window.matchMedia("(max-width: 900px)");
 const introWasSeen = document.documentElement.classList.contains("intro-seen");
+const mainContent = document.querySelector("main");
+const footerContent = document.querySelector("footer");
+const chapterRail = document.querySelector("[data-chapter-rail]");
+const chapterLinks = [...document.querySelectorAll("[data-chapter-link]")];
+const commandTrigger = document.querySelector("[data-command-open]");
+const commandShortcut = document.querySelector("[data-command-shortcut]");
+const commandDialog = document.querySelector("[data-command-dialog]");
+const commandCloseButton = document.querySelector("[data-command-close]");
+const commandSearch = document.querySelector("[data-command-search]");
+const commandResults = document.querySelector("[data-command-results]");
+const commandStatus = document.querySelector("[data-command-status]");
+
+const platformName = navigator.userAgentData?.platform ?? navigator.platform ?? "";
+if (/mac/i.test(platformName)) commandShortcut.textContent = "⌘ K";
 
 document.querySelector("[data-year]").textContent = new Date().getFullYear();
 try {
@@ -57,11 +71,36 @@ updatePageChrome();
 window.addEventListener("scroll", requestPageChromeUpdate, { passive: true });
 window.addEventListener("resize", requestPageChromeUpdate, { passive: true });
 
+let menuScrollPosition = 0;
+
 function setMenuState(open, restoreFocus = true) {
+  const wasOpen = document.body.classList.contains("menu-open");
   document.body.classList.toggle("menu-open", open);
   document.documentElement.classList.toggle("menu-open", open);
   menuButton.setAttribute("aria-expanded", String(open));
   menuButton.setAttribute("aria-label", translate(open ? "menu.close" : "menu.open"));
+  [mainContent, footerContent, chapterRail].forEach((element) => {
+    element?.toggleAttribute("inert", open);
+  });
+
+  if (mobileMenuQuery.matches && open && !wasOpen) {
+    menuScrollPosition = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${menuScrollPosition}px`;
+    document.body.style.width = "100%";
+  } else if (!open && wasOpen && document.body.style.position === "fixed") {
+    document.body.style.removeProperty("position");
+    document.body.style.removeProperty("top");
+    document.body.style.removeProperty("width");
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, menuScrollPosition);
+    if (previousScrollBehavior) {
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    } else {
+      document.documentElement.style.removeProperty("scroll-behavior");
+    }
+  }
 
   if (open) {
     requestAnimationFrame(() => menuLinks[0]?.focus({ preventScroll: true }));
@@ -89,7 +128,7 @@ document.addEventListener("keydown", (event) => {
   }
 
   if (event.key !== "Tab") return;
-  const focusableElements = [...menuLinks, ...languageButtons, menuButton];
+  const focusableElements = [...menuLinks, commandTrigger, ...languageButtons, menuButton];
   const first = focusableElements[0];
   const last = focusableElements[focusableElements.length - 1];
 
@@ -105,6 +144,290 @@ document.addEventListener("keydown", (event) => {
 mobileMenuQuery.addEventListener("change", (event) => {
   if (!event.matches && document.body.classList.contains("menu-open")) {
     setMenuState(false, false);
+  }
+});
+
+const commandItems = [
+  {
+    group: "sections",
+    mark: "00",
+    labelKey: "chapter.top",
+    detailKey: "command.sectionStartDetail",
+    href: "#top",
+    keywords: "start hero intro presentation developer utvecklare",
+  },
+  {
+    group: "sections",
+    mark: "01",
+    labelKey: "nav.projects",
+    detailKey: "command.sectionProjectsDetail",
+    href: "#projects",
+    keywords: "projects projekt work portfolio case",
+  },
+  {
+    group: "sections",
+    mark: "02",
+    labelKey: "nav.about",
+    detailKey: "command.sectionAboutDetail",
+    href: "#about",
+    keywords: "about om mig background bakgrund learn språk language",
+  },
+  {
+    group: "sections",
+    mark: "03",
+    labelKey: "chapter.process",
+    detailKey: "command.sectionProcessDetail",
+    href: "#process",
+    keywords: "process arbetssätt workflow method metod",
+  },
+  {
+    group: "sections",
+    mark: "04",
+    labelKey: "nav.experience",
+    detailKey: "command.sectionExperienceDetail",
+    href: "#experience",
+    keywords: "experience erfarenhet education utbildning internship praktik",
+  },
+  {
+    group: "sections",
+    mark: "05",
+    labelKey: "chapter.toolkit",
+    detailKey: "command.sectionToolkitDetail",
+    href: "#toolkit",
+    keywords: "technology teknik stack tools verktyg c# asp.net dotnet api backend frontend integration react typescript azure",
+  },
+  {
+    group: "sections",
+    mark: "06",
+    labelKey: "chapter.contact",
+    detailKey: "command.sectionContactDetail",
+    href: "#contact",
+    keywords: "contact kontakt email mejl linkedin github",
+  },
+  {
+    group: "projects",
+    mark: "01",
+    label: "CreaCV",
+    detailKey: "command.projectCreaCvDetail",
+    href: "https://staging.creacv.net/",
+    external: true,
+    keywords: "nextjs typescript openai ai saas pdf cv",
+  },
+  {
+    group: "projects",
+    mark: "02",
+    labelKey: "project2.title",
+    detailKey: "command.projectClimbDetail",
+    href: "https://eskilstunaklatterklubb.se/",
+    external: true,
+    keywords: "umbraco dotnet swish climbing klättring integration",
+  },
+  {
+    group: "projects",
+    mark: "05",
+    label: "Pure SkinLab",
+    detailKey: "command.projectSkinDetail",
+    href: "https://pureskinlab.se/",
+    external: true,
+    keywords: "client kund website webb responsive skin hud",
+  },
+  {
+    group: "projects",
+    mark: "06",
+    label: "Nordic Axis",
+    detailKey: "command.projectAxisDetail",
+    href: "https://www.nordicaxiskiropraktik.se/",
+    external: true,
+    keywords: "client kund website webb chiropractic kiropraktik responsive",
+  },
+  {
+    group: "actions",
+    mark: "PDF",
+    labelKey: "command.actionCv",
+    detailKey: "command.actionCvDetail",
+    href: "cv/yaarub-nassr-cv.pdf",
+    download: true,
+    keywords: "cv resume meritförteckning download ladda ner pdf",
+  },
+  {
+    group: "actions",
+    mark: "@",
+    labelKey: "command.actionEmail",
+    detailKey: "command.actionEmailDetail",
+    href: "mailto:yaarubnassr@gmail.com",
+    keywords: "email mejl contact kontakt message meddelande",
+  },
+  {
+    group: "actions",
+    mark: "SV",
+    labelKey: "command.actionLanguage",
+    detailKey: "command.actionLanguageDetail",
+    action: "language",
+    keywords: "language språk english engelska swedish svenska",
+  },
+];
+
+const commandGroupLabels = {
+  sections: "command.groupSections",
+  projects: "command.groupProjects",
+  actions: "command.groupActions",
+};
+
+let lastCommandTrigger = commandTrigger;
+let restoreCommandFocus = true;
+
+function normalizeSearchValue(value) {
+  return value
+    .toLocaleLowerCase(currentLanguage)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getCommandItemLabel(item) {
+  return item.labelKey ? translate(item.labelKey) : item.label;
+}
+
+function createCommandItem(item) {
+  const control = document.createElement(item.href ? "a" : "button");
+  control.className = "command-item";
+  control.dataset.commandItem = "";
+  if (item.href) {
+    control.href = item.href;
+    if (item.external) {
+      control.target = "_blank";
+      control.rel = "noreferrer";
+    }
+    if (item.download) control.setAttribute("download", "");
+  } else {
+    control.type = "button";
+  }
+
+  const mark = document.createElement("span");
+  mark.className = "command-item__mark";
+  mark.textContent = item.action === "language" ? (currentLanguage === "sv" ? "EN" : "SV") : item.mark;
+
+  const copy = document.createElement("span");
+  copy.className = "command-item__copy";
+  const label = document.createElement("strong");
+  label.textContent = getCommandItemLabel(item);
+  const detail = document.createElement("span");
+  detail.textContent = translate(item.detailKey);
+  copy.append(label, detail);
+
+  const arrow = document.createElement("span");
+  arrow.className = "command-item__arrow";
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = item.external ? "↗" : "→";
+  control.append(mark, copy, arrow);
+
+  control.addEventListener("click", (event) => {
+    if (item.action === "language") {
+      event.preventDefault();
+      applyLanguage(currentLanguage === "sv" ? "en" : "sv", { announce: true });
+    }
+    closeCommandPalette(false);
+  });
+  return control;
+}
+
+function renderCommandResults(query = "") {
+  const normalizedQuery = normalizeSearchValue(query.trim());
+  const matches = commandItems.filter((item) => {
+    if (!normalizedQuery) return true;
+    const searchableText = [
+      getCommandItemLabel(item),
+      translate(item.detailKey),
+      item.keywords,
+    ].join(" ");
+    return normalizeSearchValue(searchableText).includes(normalizedQuery);
+  });
+
+  commandResults.replaceChildren();
+  Object.keys(commandGroupLabels).forEach((groupName) => {
+    const groupItems = matches.filter((item) => item.group === groupName);
+    if (!groupItems.length) return;
+
+    const group = document.createElement("section");
+    group.className = "command-group";
+    const label = document.createElement("p");
+    label.className = "command-group__label";
+    label.textContent = translate(commandGroupLabels[groupName]);
+    const items = document.createElement("div");
+    items.className = "command-group__items";
+    groupItems.forEach((item) => items.append(createCommandItem(item)));
+    group.append(label, items);
+    commandResults.append(group);
+  });
+
+  if (!matches.length) {
+    const empty = document.createElement("p");
+    empty.className = "command-empty";
+    empty.textContent = translate("command.noResults");
+    commandResults.append(empty);
+  }
+  commandStatus.textContent = formatTranslation("command.results", { count: matches.length });
+}
+
+function openCommandPalette(trigger = commandTrigger) {
+  if (document.body.classList.contains("menu-open")) setMenuState(false, false);
+  lastCommandTrigger = trigger;
+  restoreCommandFocus = true;
+  document.body.classList.add("command-open");
+  commandSearch.value = "";
+  renderCommandResults();
+  commandDialog.showModal();
+  requestAnimationFrame(() => commandSearch.focus({ preventScroll: true }));
+}
+
+function closeCommandPalette(restoreFocus = true) {
+  if (!commandDialog.open) return;
+  restoreCommandFocus = restoreFocus;
+  commandDialog.close();
+}
+
+commandTrigger.addEventListener("click", () => openCommandPalette(commandTrigger));
+commandCloseButton.addEventListener("click", () => closeCommandPalette());
+commandDialog.addEventListener("click", (event) => {
+  if (event.target === commandDialog) closeCommandPalette();
+});
+commandDialog.addEventListener("cancel", () => {
+  restoreCommandFocus = true;
+});
+commandDialog.addEventListener("close", () => {
+  document.body.classList.remove("command-open");
+  if (!restoreCommandFocus) return;
+  const desktopFocusTarget = lastCommandTrigger === document.body ? commandTrigger : lastCommandTrigger;
+  const focusTarget = mobileMenuQuery.matches ? menuButton : desktopFocusTarget;
+  focusTarget?.focus({ preventScroll: true });
+});
+commandSearch.addEventListener("input", () => renderCommandResults(commandSearch.value));
+commandSearch.addEventListener("keydown", (event) => {
+  if (event.key !== "ArrowDown") return;
+  const firstResult = commandResults.querySelector("[data-command-item]");
+  if (!firstResult) return;
+  event.preventDefault();
+  firstResult.focus();
+});
+commandResults.addEventListener("keydown", (event) => {
+  if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+  const resultItems = [...commandResults.querySelectorAll("[data-command-item]")];
+  if (!resultItems.length) return;
+  event.preventDefault();
+  const currentIndex = resultItems.indexOf(document.activeElement);
+  let nextIndex = currentIndex;
+  if (event.key === "ArrowDown") nextIndex = (currentIndex + 1) % resultItems.length;
+  if (event.key === "ArrowUp") nextIndex = (currentIndex - 1 + resultItems.length) % resultItems.length;
+  if (event.key === "Home") nextIndex = 0;
+  if (event.key === "End") nextIndex = resultItems.length - 1;
+  resultItems[nextIndex].focus();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key.toLocaleLowerCase() !== "k" || (!event.ctrlKey && !event.metaKey)) return;
+  event.preventDefault();
+  if (commandDialog.open) {
+    closeCommandPalette();
+  } else {
+    openCommandPalette(document.activeElement);
   }
 });
 
@@ -129,15 +452,50 @@ document.querySelectorAll(".reveal").forEach((element, index) => {
 
 const sections = [...document.querySelectorAll("main section[id]")];
 const navLinks = [...document.querySelectorAll(".nav a")];
+const heroChapterCount = document.querySelector(".hero__footer > span:last-child");
+
+function setActiveChapter(sectionId) {
+  navLinks.forEach((link) => {
+    const active = link.hash === `#${sectionId}`;
+    link.classList.toggle("active", active);
+    if (active) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+  chapterLinks.forEach((link) => {
+    const active = link.dataset.chapterLink === sectionId;
+    link.classList.toggle("is-active", active);
+    if (active) {
+      link.setAttribute("aria-current", "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+  const activeIndex = Math.max(
+    0,
+    chapterLinks.findIndex((link) => link.dataset.chapterLink === sectionId),
+  );
+  const progress = chapterLinks.length > 1 ? activeIndex / (chapterLinks.length - 1) : 0;
+  chapterRail.style.setProperty("--chapter-progress", String(progress));
+  chapterRail.classList.toggle("is-on-light", sectionId === "toolkit");
+}
+
+if (heroChapterCount) {
+  heroChapterCount.textContent = `00 / ${String(Math.max(0, chapterLinks.length - 1)).padStart(2, "0")}`;
+}
+setActiveChapter("top");
+
 const sectionObserver = new IntersectionObserver(
   (entries) => {
-    const visible = entries.find((entry) => entry.isIntersecting);
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
     if (!visible) return;
-    navLinks.forEach((link) => {
-      link.classList.toggle("active", link.hash === `#${visible.target.id}`);
-    });
+    setActiveChapter(visible.target.id);
   },
-  { rootMargin: "-30% 0px -60%", threshold: 0 },
+  { rootMargin: "-34% 0px -56%", threshold: 0 },
 );
 sections.forEach((section) => sectionObserver.observe(section));
 
@@ -160,6 +518,20 @@ if (!reducedMotion && window.matchMedia("(pointer: fine)").matches) {
     });
     card.addEventListener("pointerleave", () => {
       card.style.transform = "perspective(1100px) rotateX(0) rotateY(0)";
+    });
+  });
+
+  document.querySelectorAll(".project:has(> a)").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty("--card-x", `${x}%`);
+      card.style.setProperty("--card-y", `${y}%`);
+      card.classList.add("is-pointer-active");
+    });
+    card.addEventListener("pointerleave", () => {
+      card.classList.remove("is-pointer-active");
     });
   });
 
@@ -229,6 +601,17 @@ const projects = [...document.querySelectorAll(".project[data-category]")];
 const projectStatus = document.querySelector("[data-project-status]");
 let activeProjectFilter = "all";
 
+function updateProjectFilterCounts() {
+  projectFilterButtons.forEach((button) => {
+    const filter = button.dataset.projectFilter;
+    const count = filter === "all"
+      ? projects.length
+      : projects.filter((project) => project.dataset.category === filter).length;
+    const countElement = button.querySelector("span");
+    if (countElement) countElement.textContent = String(count).padStart(2, "0");
+  });
+}
+
 function updateProjectStatus() {
   const visibleCount = projects.filter((project) => !project.hidden).length;
   if (activeProjectFilter === "all") {
@@ -268,6 +651,7 @@ projectFilterButtons.forEach((button) => {
     updateProjects();
   });
 });
+updateProjectFilterCounts();
 
 const processDeck = document.querySelector("[data-process-deck]");
 const processCards = [...document.querySelectorAll("[data-process-card]")];
@@ -290,7 +674,7 @@ function updateProcessDeck(nextIndex) {
     card.style.removeProperty("--drag-x");
     card.style.removeProperty("--drag-r");
   });
-  processCount.textContent = `${String(processIndex + 1).padStart(2, "0")} / 03`;
+  processCount.textContent = `${String(processIndex + 1).padStart(2, "0")} / ${String(processCards.length).padStart(2, "0")}`;
   processProgress.style.transform = `scaleX(${(processIndex + 1) / processCards.length})`;
 }
 
@@ -436,9 +820,11 @@ copyEmailButton.addEventListener("click", async () => {
 
 const translatedAttributes = [
   ["data-i18n-aria-label", "aria-label"],
+  ["data-i18n-aria-roledescription", "aria-roledescription"],
   ["data-i18n-alt", "alt"],
   ["data-i18n-content", "content"],
   ["data-i18n-cursor", "data-cursor"],
+  ["data-i18n-placeholder", "placeholder"],
 ];
 
 function applyLanguage(language, { persist = true, announce = false } = {}) {
@@ -467,7 +853,9 @@ function applyLanguage(language, { persist = true, announce = false } = {}) {
 
   const activeHeroFocus = document.querySelector("[data-hero-focus].is-active")?.dataset.heroFocus ?? "backend";
   heroFocusCopy.textContent = translate(`hero.focus.${activeHeroFocus}`);
+  updateProjectFilterCounts();
   updateProjectStatus();
+  if (commandDialog.open) renderCommandResults(commandSearch.value);
 
   const activeStackTab = document.querySelector("[data-stack-tab][aria-selected='true']") ?? stackTabs[0];
   selectStack(activeStackTab);

@@ -58,6 +58,20 @@
     </div>
 
     <header class="site-header" data-header>
+      <button
+        class="command-trigger"
+        type="button"
+        aria-haspopup="dialog"
+        aria-controls="portfolio-index"
+        aria-keyshortcuts="Control+K Meta+K"
+        aria-label="Öppna snabbnavigering"
+        data-i18n-aria-label="command.openLabel"
+        data-command-open
+      >
+        <span class="command-trigger__signal" aria-hidden="true"></span>
+        <span data-i18n="command.open">Utforska</span>
+        <kbd data-command-shortcut>Ctrl K</kbd>
+      </button>
       <nav
         class="nav"
         id="main-nav"
@@ -67,7 +81,16 @@
       >
         <a href="#projects" data-i18n="nav.projects">Projekt</a>
         <a href="#about" data-i18n="nav.about">Om mig</a>
+        <a class="nav__secondary" href="#process" data-i18n="chapter.process"
+          >Process</a
+        >
         <a href="#experience" data-i18n="nav.experience">Erfarenhet</a>
+        <a class="nav__secondary" href="#toolkit" data-i18n="chapter.toolkit"
+          >Teknik</a
+        >
+        <a class="nav__secondary" href="#contact" data-i18n="chapter.contact"
+          >Kontakt</a
+        >
       </nav>
       <div
         class="language-switcher"
@@ -115,6 +138,99 @@
         <span></span><span></span>
       </button>
     </header>
+
+    <aside
+      class="chapter-rail"
+      aria-label="Sidans avsnitt"
+      data-i18n-aria-label="chapter.label"
+      data-chapter-rail
+    >
+      <span class="chapter-rail__track" aria-hidden="true"><i></i></span>
+      <a class="is-active" href="#top" data-chapter-link="top" aria-current="location">
+        <span>00</span><b data-i18n="chapter.top">Start</b>
+      </a>
+      <a href="#projects" data-chapter-link="projects">
+        <span>01</span><b data-i18n="nav.projects">Projekt</b>
+      </a>
+      <a href="#about" data-chapter-link="about">
+        <span>02</span><b data-i18n="nav.about">Om mig</b>
+      </a>
+      <a href="#process" data-chapter-link="process">
+        <span>03</span><b data-i18n="chapter.process">Process</b>
+      </a>
+      <a href="#experience" data-chapter-link="experience">
+        <span>04</span><b data-i18n="nav.experience">Erfarenhet</b>
+      </a>
+      <a href="#toolkit" data-chapter-link="toolkit">
+        <span>05</span><b data-i18n="chapter.toolkit">Teknik</b>
+      </a>
+      <a href="#contact" data-chapter-link="contact">
+        <span>06</span><b data-i18n="chapter.contact">Kontakt</b>
+      </a>
+    </aside>
+
+    <dialog
+      class="command-palette"
+      id="portfolio-index"
+      aria-labelledby="command-title"
+      aria-describedby="command-hint"
+      data-command-dialog
+    >
+      <div class="command-palette__surface">
+        <header class="command-palette__header">
+          <div>
+            <p class="kicker" data-i18n="command.eyebrow">PORTFOLIO / INDEX</p>
+            <h2 id="command-title" data-i18n="command.title">
+              Hitta direkt
+            </h2>
+          </div>
+          <button
+            class="command-palette__close"
+            type="button"
+            aria-label="Stäng snabbnavigering"
+            data-i18n-aria-label="command.close"
+            data-command-close
+          >
+            <span aria-hidden="true"></span><span aria-hidden="true"></span>
+          </button>
+        </header>
+
+        <div class="command-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="m16 16 4 4"></path>
+          </svg>
+          <label class="sr-only" for="command-search" data-i18n="command.searchLabel"
+            >Sök i portfolion</label
+          >
+          <input
+            id="command-search"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="Sök projekt, teknik eller avsnitt"
+            data-i18n-placeholder="command.searchPlaceholder"
+            data-command-search
+          />
+          <kbd>ESC</kbd>
+        </div>
+
+        <p
+          class="command-palette__status sr-only"
+          role="status"
+          aria-live="polite"
+          data-command-status
+        ></p>
+        <div class="command-results" data-command-results></div>
+
+        <footer class="command-palette__footer" id="command-hint">
+          <span data-i18n="command.hint"
+            >Skriv för att söka. Använd piltangenterna och Enter.</span
+          >
+          <span aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd><kbd>Enter</kbd></span>
+        </footer>
+      </div>
+    </dialog>
 
     <main id="main">
       <section class="hero" id="top">
@@ -189,14 +305,18 @@
         <div class="hero__visual reveal" data-tilt>
           <div class="portrait-wrap">
             <div class="portrait-grid" aria-hidden="true"></div>
-            <img
-              src="bilder/yaarub-portrait.png"
-              alt="Porträtt av Yaarub Nassr"
-              data-i18n-alt="hero.portraitAlt"
-              width="1154"
-              height="961"
-              fetchpriority="high"
-            />
+            <picture>
+              <source srcset="bilder/yaarub-portrait.webp" type="image/webp" />
+              <img
+                src="bilder/yaarub-portrait.png"
+                alt="Porträtt av Yaarub Nassr"
+                data-i18n-alt="hero.portraitAlt"
+                width="1154"
+                height="961"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </picture>
             <span class="portrait-label">59.3293° N / 18.0686° E</span>
             <div class="build-route" aria-hidden="true">
               <span class="is-active" data-route-node="idea"
@@ -214,7 +334,7 @@
         <div class="hero__footer reveal">
           <span data-i18n="hero.continue">Fortsätt till projekten</span>
           <div class="scroll-line"><i></i></div>
-          <span>01 / 05</span>
+          <span>00 / 06</span>
         </div>
       </section>
 
@@ -814,7 +934,8 @@
             </h2>
           </div>
           <p data-i18n="process.intro">
-            Jag delar oftast upp arbetet i tre steg.
+            Jag driver arbetet från en tydlig avgränsning till en testad lösning
+            som går att lämna vidare.
           </p>
         </div>
 
@@ -823,6 +944,9 @@
             class="process-deck"
             data-process-deck
             tabindex="0"
+            role="region"
+            aria-roledescription="karusell"
+            data-i18n-aria-roledescription="process.carousel"
             aria-label="Tre steg i mitt arbetssätt. Använd vänster och höger piltangent för att byta steg."
             data-i18n-aria-label="process.deckLabel"
           >
@@ -841,8 +965,9 @@
               <div class="process-card__copy">
                 <h3 data-i18n="process.step1Title">Förstå behovet</h3>
                 <p data-i18n="process.step1Text">
-                  Jag börjar med att klargöra målet, användarnas behov och de
-                  viktigaste flödena.
+                  Jag avgränsar målet, kartlägger de viktigaste flödena och
+                  bestämmer vad som behöver vara klart innan utvecklingen
+                  börjar.
                 </p>
               </div>
             </article>
@@ -864,8 +989,9 @@
               <div class="process-card__copy">
                 <h3 data-i18n="process.step2Title">Bygga lösningen</h3>
                 <p data-i18n="process.step2Text">
-                  Jag utvecklar backend, gränssnitt och integrationer och testar
-                  delarna tillsammans.
+                  Jag delar upp arbetet i mindre leveranser och bygger
+                  datamodell, API, integrationer och gränssnitt med löpande
+                  återkoppling.
                 </p>
               </div>
             </article>
@@ -887,8 +1013,9 @@
               <div class="process-card__copy">
                 <h3 data-i18n="process.step3Title">Testa och slutföra</h3>
                 <p data-i18n="process.step3Text">
-                  Jag testar funktioner och felhantering samt kontrollerar
-                  layouten på olika skärmstorlekar före leverans.
+                  Jag kontrollerar huvudflöden, felhantering och responsivitet,
+                  dokumenterar viktiga beslut och lämnar över en lösning som
+                  går att förvalta.
                 </p>
               </div>
             </article>
@@ -982,7 +1109,11 @@
         </div>
       </section>
 
-      <section class="section toolkit" aria-labelledby="toolkit-title">
+      <section
+        class="section toolkit"
+        id="toolkit"
+        aria-labelledby="toolkit-title"
+      >
         <div class="section-heading reveal">
           <div>
             <p class="kicker" data-i18n="toolkit.kicker">TEKNIK</p>
