@@ -284,16 +284,15 @@
     font-size: 0.75rem;
     font-weight: 600;
   }
-  .command-trigger kbd {
-    min-width: 3.1rem;
-    padding: 0.33rem 0.48rem;
+  .command-trigger__count {
+    min-width: 2rem;
+    padding: 0.33rem 0.45rem;
     border: 1px solid rgba(202, 230, 234, 0.12);
     border-radius: 999px;
     background: rgba(202, 230, 234, 0.06);
     color: var(--dim);
     font-family: monospace;
     font-size: 0.58rem;
-    font-weight: 400;
     text-align: center;
   }
   .brand {
@@ -765,26 +764,119 @@
     animation: scroll-line 2.4s ease-in-out infinite;
   }
 
-  .ticker {
+  .tech-map {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+    gap: clamp(2.5rem, 6vw, 7rem);
+    padding: clamp(4.5rem, 8vw, 7.5rem) var(--pad);
     overflow: hidden;
     border-block: 1px solid var(--line);
-    background: var(--lime);
-    color: var(--bg);
-    transform: rotate(-1deg) scale(1.02);
+    background:
+      radial-gradient(circle at 90% 15%, rgba(85, 181, 199, 0.1), transparent 25rem),
+      rgba(4, 22, 26, 0.72);
   }
-  .ticker__track {
+  .tech-map::before {
+    content: "STACK / 03";
+    position: absolute;
+    right: var(--pad);
+    top: 1.2rem;
+    color: var(--dim);
+    font-family: monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+  }
+  .tech-map__heading {
+    align-self: center;
+  }
+  .tech-map__heading h2 {
+    max-width: 12ch;
+    margin-top: 1rem;
+    font-size: clamp(2.45rem, 4.8vw, 5.8rem);
+  }
+  .tech-map__heading > p:last-child {
+    max-width: 32rem;
+    margin-top: 1.4rem;
+  }
+  .tech-map__flow {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    min-width: 0;
+  }
+  .tech-map__node {
+    position: relative;
+    min-width: 0;
+    min-height: 17rem;
     display: flex;
-    width: max-content;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 0.85rem 0;
-    animation: ticker 30s linear infinite;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background:
+      linear-gradient(rgba(202, 230, 234, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(202, 230, 234, 0.025) 1px, transparent 1px),
+      rgba(13, 43, 49, 0.68);
+    background-size: 24px 24px;
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease,
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .ticker span {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 0.83rem;
-    letter-spacing: 0.05em;
+  .tech-map__node:hover {
+    border-color: rgba(85, 181, 199, 0.45);
+    background-color: rgba(17, 54, 61, 0.86);
+    transform: translateY(-0.35rem);
+  }
+  .tech-map__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--aqua);
+    font-family: monospace;
+    font-size: 0.65rem;
+  }
+  .tech-map__meta i {
+    width: 0.55rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--aqua);
+    box-shadow: 0 0 0 0.3rem rgba(85, 181, 199, 0.1);
+  }
+  .tech-map__node h3 {
+    margin-top: auto;
+    font-size: clamp(1.45rem, 2.2vw, 2.35rem);
+    letter-spacing: -0.045em;
+  }
+  .tech-map__node > p {
+    margin-top: 0.9rem;
+    color: var(--muted);
+    font-family: monospace;
+    font-size: 0.67rem;
+    line-height: 1.75;
+  }
+  .tech-map__connector {
+    align-self: center;
+    width: clamp(1rem, 2vw, 2.2rem);
+    height: 1px;
+    overflow: hidden;
+    background: var(--line);
+  }
+  .tech-map__connector i {
+    display: block;
+    width: 35%;
+    height: 100%;
+    background: var(--aqua);
+    animation: connector-pulse 2.8s ease-in-out infinite;
+  }
+  .tech-map__link {
+    position: absolute;
+    left: var(--pad);
+    bottom: 1.2rem;
+    color: var(--aqua);
+    font-size: 0.72rem;
+    font-weight: 600;
   }
 
   .section {
@@ -1224,7 +1316,8 @@
   }
 
   .project__visual--skin,
-  .project__visual--axis {
+  .project__visual--dala,
+  .project__visual--hair {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1275,60 +1368,159 @@
     font-size: 0.55rem;
     letter-spacing: 0.3em;
   }
-  .project__visual--axis {
+  .project__visual--dala {
     background:
       radial-gradient(
-        circle at 50% 45%,
-        rgba(85, 181, 199, 0.18),
-        transparent 30%
+        circle at 50% 80%,
+        rgba(85, 181, 199, 0.16),
+        transparent 35%
       ),
-      #071f24;
+      linear-gradient(145deg, #ecf6f4, #cfe4df);
+    color: #123a39;
   }
-  .axis-rings {
+  .dala-contours {
     position: absolute;
-    width: 15rem;
+    width: 19rem;
     aspect-ratio: 1;
+    opacity: 0.62;
+    transform: rotate(-12deg);
   }
-  .axis-rings i {
+  .dala-contours i {
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(85, 181, 199, 0.2);
-    border-radius: 50%;
+    border: 1px solid rgba(18, 58, 57, 0.22);
+    border-radius: 58% 42% 55% 45% / 44% 61% 39% 56%;
   }
-  .axis-rings i:nth-child(2) {
-    inset: 2.2rem;
+  .dala-contours i:nth-child(2) {
+    inset: 2rem;
+    border-radius: 39% 61% 43% 57% / 58% 41% 59% 42%;
   }
-  .axis-rings i:nth-child(3) {
-    inset: 4.4rem;
+  .dala-contours i:nth-child(3) {
+    inset: 4rem;
+    border-radius: 63% 37% 54% 46% / 45% 52% 48% 55%;
   }
-  .axis-rings b {
+  .dala-place {
     position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    color: var(--aqua);
-    font-size: 2rem;
-    font-weight: 300;
+    left: 1.4rem;
+    top: 1.3rem;
+    color: rgba(18, 58, 57, 0.62);
+    font-family: monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
   }
-  .project__visual--axis p {
+  .project__visual--dala p {
     position: relative;
-    color: var(--ink);
+    color: #123a39;
     font-family: var(--display);
     font-size: clamp(2.7rem, 5vw, 5rem);
-    font-weight: 300;
+    font-weight: 500;
     line-height: 0.8;
     letter-spacing: -0.07em;
   }
-  .project__visual--axis p strong {
-    color: var(--aqua);
+  .project__visual--dala p strong {
+    color: #147b75;
     font-weight: 800;
   }
-  .project__visual--axis > span {
+  .project__visual--dala > span:last-child {
     position: relative;
     margin-top: 1.7rem;
-    color: var(--muted);
+    color: rgba(18, 58, 57, 0.7);
     font-size: 0.6rem;
-    letter-spacing: 0.35em;
+    letter-spacing: 0.24em;
+  }
+  .project--client-feature {
+    grid-column: 1 / -1;
+  }
+  .project--client-feature .project__visual {
+    min-height: 30rem;
+  }
+  .project__visual--hair {
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: clamp(2rem, 5vw, 4.5rem);
+    background:
+      linear-gradient(90deg, rgba(6, 28, 32, 0.11) 1px, transparent 1px),
+      linear-gradient(rgba(6, 28, 32, 0.11) 1px, transparent 1px),
+      linear-gradient(145deg, #dbe9ec, #a8cdd4);
+    background-size: 48px 48px;
+    color: #061c20;
+    text-align: left;
+  }
+  .hair-strands {
+    position: absolute;
+    inset: -8% -2% -8% 50%;
+    overflow: hidden;
+  }
+  .hair-strands i {
+    position: absolute;
+    top: -10%;
+    width: clamp(7rem, 16vw, 15rem);
+    height: 125%;
+    border: 1px solid rgba(6, 28, 32, 0.22);
+    border-radius: 50%;
+    transform: rotate(14deg);
+  }
+  .hair-strands i:nth-child(1) {
+    left: 0;
+  }
+  .hair-strands i:nth-child(2) {
+    left: 16%;
+  }
+  .hair-strands i:nth-child(3) {
+    left: 32%;
+  }
+  .hair-strands i:nth-child(4) {
+    left: 48%;
+  }
+  .hair-monogram {
+    position: absolute;
+    left: 2rem;
+    top: 1.8rem;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    aspect-ratio: 1;
+    border: 1px solid rgba(6, 28, 32, 0.35);
+    border-radius: 50%;
+    font-family: Georgia, serif;
+    font-size: 0.8rem;
+  }
+  .project__visual--hair > p {
+    position: relative;
+    max-width: 10ch;
+    color: #061c20;
+    font-family: var(--display);
+    font-size: clamp(3.2rem, 7.4vw, 8rem);
+    font-weight: 700;
+    line-height: 0.74;
+    letter-spacing: -0.08em;
+  }
+  .project__visual--hair > p em {
+    font-family: Georgia, serif;
+    font-size: 0.63em;
+    font-weight: 400;
+    letter-spacing: -0.05em;
+  }
+  .hair-booking {
+    position: absolute;
+    right: 2rem;
+    bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: rgba(6, 28, 32, 0.72);
+    font-family: monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+  }
+  .hair-booking i {
+    width: 2.5rem;
+    height: 1px;
+    background: rgba(6, 28, 32, 0.38);
+  }
+  .hair-booking strong {
+    color: #061c20;
+    font-weight: 700;
   }
   .project__visual--archive {
     background: #dbe9eb;
@@ -2011,7 +2203,7 @@
   }
   .command-palette__surface {
     display: grid;
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     max-height: min(46rem, calc(100dvh - 2rem));
     background:
       linear-gradient(rgba(202, 230, 234, 0.025) 1px, transparent 1px),
@@ -2029,6 +2221,11 @@
     margin-top: 0.45rem;
     font-size: clamp(2rem, 6vw, 3.5rem);
     letter-spacing: -0.06em;
+  }
+  .command-palette__intro {
+    max-width: 30rem;
+    margin-top: 0.75rem;
+    font-size: 0.84rem;
   }
   .command-palette__close {
     position: relative;
@@ -2064,46 +2261,6 @@
   .command-palette__close span:last-child {
     transform: translate(-50%, -50%) rotate(-45deg);
   }
-  .command-search {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.85rem;
-    min-height: 4.1rem;
-    margin-inline: 1.1rem;
-    padding-inline: 1rem 0.75rem;
-    border: 1px solid rgba(85, 181, 199, 0.28);
-    border-radius: 0.9rem;
-    background: rgba(4, 22, 26, 0.88);
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
-  }
-  .command-search:focus-within {
-    border-color: var(--aqua);
-    box-shadow:
-      0 0 0 3px rgba(85, 181, 199, 0.08),
-      0 14px 35px rgba(0, 0, 0, 0.18);
-  }
-  .command-search svg {
-    width: 1.25rem;
-    fill: none;
-    stroke: var(--aqua);
-    stroke-width: 1.6;
-  }
-  .command-search input {
-    width: 100%;
-    min-height: 3.9rem;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: var(--ink);
-    font-family: var(--display);
-    font-size: clamp(1rem, 2vw, 1.18rem);
-  }
-  .command-search input::placeholder {
-    color: var(--dim);
-    opacity: 1;
-  }
-  .command-search kbd,
   .command-palette__footer kbd {
     padding: 0.28rem 0.42rem;
     border: 1px solid var(--line);
@@ -2207,14 +2364,6 @@
     color: var(--aqua);
     transform: translate(0.15rem, -0.15rem);
   }
-  .command-empty {
-    min-height: 10rem;
-    display: grid;
-    place-items: center;
-    padding: 2rem;
-    color: var(--muted);
-    text-align: center;
-  }
   .command-palette__footer {
     display: flex;
     align-items: center;
@@ -2317,9 +2466,12 @@
       transform: scaleX(1);
     }
   }
-  @keyframes ticker {
+  @keyframes connector-pulse {
+    from {
+      transform: translateX(-120%);
+    }
     to {
-      transform: translateX(-50%);
+      transform: translateX(390%);
     }
   }
   @keyframes scroll-line {
@@ -2684,6 +2836,13 @@
     .hero__footer {
       bottom: 1rem;
     }
+    .tech-map {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    .tech-map__heading h2 {
+      max-width: 14ch;
+    }
     .section-heading {
       grid-template-columns: 1fr;
     }
@@ -2777,6 +2936,32 @@
     .section {
       padding-block: 6.5rem;
     }
+    .tech-map {
+      padding-block: 5rem 5.5rem;
+    }
+    .tech-map::before {
+      right: var(--pad);
+    }
+    .tech-map__flow {
+      grid-template-columns: 1fr;
+    }
+    .tech-map__node {
+      min-height: 11.5rem;
+    }
+    .tech-map__connector {
+      justify-self: center;
+      width: 1px;
+      height: 1.5rem;
+    }
+    .tech-map__connector i {
+      width: 100%;
+      height: 100%;
+      animation: none;
+      transform: none;
+    }
+    .tech-map__link {
+      bottom: 1.1rem;
+    }
     .project-filters {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -2790,12 +2975,34 @@
     }
     .project--featured,
     .project--wide,
+    .project--client-feature,
     .project--archive-wide {
       grid-column: auto;
     }
     .project__visual,
     .project--featured .project__visual {
       min-height: 18rem;
+    }
+    .project--client-feature .project__visual {
+      min-height: 22rem;
+    }
+    .project__visual--hair {
+      padding: 1.5rem;
+    }
+    .project__visual--hair > p {
+      font-size: clamp(2.6rem, 12vw, 4.6rem);
+    }
+    .hair-monogram {
+      left: 1.2rem;
+      top: 1.2rem;
+    }
+    .hair-booking {
+      right: 1.2rem;
+      top: 1.35rem;
+      bottom: auto;
+    }
+    .hair-booking i {
+      display: none;
     }
     .project__visual--creacv {
       padding: 2rem 1.2rem 0;
@@ -2921,11 +3128,8 @@
     .command-palette__header {
       padding: 1.2rem 1rem 0.95rem;
     }
-    .command-search,
     .command-results {
       margin-inline: 0.6rem;
-    }
-    .command-results {
       padding-inline: 0;
     }
     .command-item {
@@ -2961,7 +3165,7 @@
     .hero h1.reveal {
       clip-path: none;
     }
-    .ticker__track {
+    .tech-map__connector i {
       animation: none;
       transform: none;
     }

@@ -63,14 +63,13 @@
         type="button"
         aria-haspopup="dialog"
         aria-controls="portfolio-index"
-        aria-keyshortcuts="Control+K Meta+K"
         aria-label="Öppna snabbnavigering"
         data-i18n-aria-label="command.openLabel"
         data-command-open
       >
         <span class="command-trigger__signal" aria-hidden="true"></span>
         <span data-i18n="command.open">Utforska</span>
-        <kbd data-command-shortcut>Ctrl K</kbd>
+        <span class="command-trigger__count" aria-hidden="true">15</span>
       </button>
       <nav
         class="nav"
@@ -183,6 +182,9 @@
             <h2 id="command-title" data-i18n="command.title">
               Hitta direkt
             </h2>
+            <p class="command-palette__intro" data-i18n="command.intro">
+              Välj ett avsnitt, projekt eller en genväg.
+            </p>
           </div>
           <button
             class="command-palette__close"
@@ -195,37 +197,11 @@
           </button>
         </header>
 
-        <div class="command-search">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="6.5"></circle>
-            <path d="m16 16 4 4"></path>
-          </svg>
-          <label class="sr-only" for="command-search" data-i18n="command.searchLabel"
-            >Sök i portfolion</label
-          >
-          <input
-            id="command-search"
-            type="search"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="Sök projekt, teknik eller avsnitt"
-            data-i18n-placeholder="command.searchPlaceholder"
-            data-command-search
-          />
-          <kbd>ESC</kbd>
-        </div>
-
-        <p
-          class="command-palette__status sr-only"
-          role="status"
-          aria-live="polite"
-          data-command-status
-        ></p>
         <div class="command-results" data-command-results></div>
 
         <footer class="command-palette__footer" id="command-hint">
           <span data-i18n="command.hint"
-            >Skriv för att söka. Använd piltangenterna och Enter.</span
+            >Välj en genväg. Använd piltangenterna och Enter.</span
           >
           <span aria-hidden="true"><kbd>↑</kbd><kbd>↓</kbd><kbd>Enter</kbd></span>
         </footer>
@@ -338,23 +314,53 @@
         </div>
       </section>
 
-      <div
-        class="ticker"
-        aria-label="Tekniker jag arbetar med"
-        data-i18n-aria-label="ticker.label"
+      <section
+        class="tech-map"
+        aria-labelledby="tech-map-title"
       >
-        <div class="ticker__track">
-          <span>C#</span><i>✦</i><span>ASP.NET CORE</span><i>✦</i
-          ><span>REACT</span><i>✦</i> <span>TYPESCRIPT</span><i>✦</i
-          ><span>AZURE</span><i>✦</i
-          ><span data-i18n="ticker.systemIntegration">SYSTEMINTEGRATION</span
-          ><i>✦</i> <span>C#</span><i>✦</i><span>ASP.NET CORE</span><i>✦</i
-          ><span>REACT</span><i>✦</i> <span>TYPESCRIPT</span><i>✦</i
-          ><span>AZURE</span><i>✦</i
-          ><span data-i18n="ticker.systemIntegration">SYSTEMINTEGRATION</span
-          ><i>✦</i>
+        <div class="tech-map__heading reveal">
+          <div>
+            <p class="kicker" data-i18n="techMap.kicker">
+              TEKNISK VERKTYGSLÅDA
+            </p>
+            <h2 id="tech-map-title" data-i18n-html="techMap.title">
+              Tre lager. <em>En sammanhängande lösning.</em>
+            </h2>
+          </div>
+          <p data-i18n="techMap.intro">
+            Jag arbetar genom hela flödet och väljer teknik efter det som ska
+            byggas.
+          </p>
         </div>
-      </div>
+        <div class="tech-map__flow reveal">
+          <article class="tech-map__node">
+            <div class="tech-map__meta">
+              <span>01</span><i aria-hidden="true"></i>
+            </div>
+            <h3 data-i18n="techMap.backend">Backend</h3>
+            <p>C# · ASP.NET Core · Web API · SQL</p>
+          </article>
+          <div class="tech-map__connector" aria-hidden="true"><i></i></div>
+          <article class="tech-map__node">
+            <div class="tech-map__meta">
+              <span>02</span><i aria-hidden="true"></i>
+            </div>
+            <h3 data-i18n="techMap.frontend">Frontend</h3>
+            <p>React · Next.js · TypeScript · CSS</p>
+          </article>
+          <div class="tech-map__connector" aria-hidden="true"><i></i></div>
+          <article class="tech-map__node">
+            <div class="tech-map__meta">
+              <span>03</span><i aria-hidden="true"></i>
+            </div>
+            <h3 data-i18n="techMap.delivery">Integration och leverans</h3>
+            <p>Azure · CI/CD · Docker · CMS</p>
+          </article>
+        </div>
+        <a class="tech-map__link" href="#toolkit" data-i18n="techMap.link">
+          Se hela teknikprofilen ↓
+        </a>
+      </section>
 
       <section class="section projects" id="projects">
         <div class="section-heading reveal">
@@ -386,7 +392,7 @@
               aria-pressed="true"
               data-i18n-html="projects.filter.all"
             >
-              Alla <span>09</span>
+              Alla <span>10</span>
             </button>
             <button
               type="button"
@@ -402,7 +408,7 @@
               aria-pressed="false"
               data-i18n-html="projects.filter.client"
             >
-              Kundwebb <span>03</span>
+              Kundwebb <span>04</span>
             </button>
             <button
               type="button"
@@ -418,7 +424,7 @@
             data-project-status
             aria-live="polite"
           >
-            Visar alla 9 projekt
+            Visar alla 10 projekt
           </p>
         </div>
 
@@ -674,10 +680,10 @@
 
           <article class="project reveal" data-category="client">
             <a
-              href="https://www.nordicaxiskiropraktik.se/"
+              href="https://dalahalsankiropraktik.se/"
               target="_blank"
               rel="noreferrer"
-              aria-label="Besök Nordic Axis Kiropraktik"
+              aria-label="Besök Dala Hälsan Kiropraktik"
               data-i18n-aria-label="project6.aria"
               data-cursor="Öppna"
               data-i18n-cursor="projects.open"
@@ -689,30 +695,85 @@
                 >
               </div>
               <div
-                class="project__visual project__visual--axis"
+                class="project__visual project__visual--dala"
                 aria-hidden="true"
               >
-                <div class="axis-rings"><i></i><i></i><i></i><b>+</b></div>
-                <p>NORDIC<br /><strong>AXIS</strong></p>
-                <span data-i18n="project6.visual">KIROPRAKTIK</span>
+                <div class="dala-contours"><i></i><i></i><i></i></div>
+                <span class="dala-place">FALUN / 60.6065° N</span>
+                <p>DALA<br /><strong>HÄLSAN</strong></p>
+                <span data-i18n="project6.visual">KIROPRAKTIK · KADDIO</span>
               </div>
               <div class="project__body">
                 <div>
                   <p class="kicker" data-i18n="project6.kicker">
                     KUNDPROJEKT · HÄLSA
                   </p>
-                  <h3>Nordic Axis</h3>
+                  <h3>Dala Hälsan</h3>
                 </div>
                 <p data-i18n="project6.description">
-                  En responsiv webbplats för Nordic Axis Kiropraktik. Jag
-                  arbetade med navigationen och gjorde information och
-                  kontaktuppgifter enkla att hitta.
+                  En lugn och förtroendeskapande webbplats för en
+                  kiropraktikmottagning i Falun. Jag strukturerade behandlingar,
+                  priser, besöksflöde och vanliga frågor med en tydlig väg till
+                  bokning via Kaddio.
                 </p>
               </div>
               <ul class="tags">
+                <li>PHP</li>
+                <li>JavaScript</li>
                 <li data-i18n="projects.responsive">Responsiv design</li>
-                <li>Frontend</li>
-                <li data-i18n="projects.accessibility">Tillgänglighet</li>
+                <li>Kaddio</li>
+              </ul>
+            </a>
+          </article>
+
+          <article
+            class="project project--client-feature reveal"
+            data-category="client"
+          >
+            <a
+              href="https://hairinternationalsickla.se/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Besök Hair International Sickla"
+              data-i18n-aria-label="project10.aria"
+              data-cursor="Öppna"
+              data-i18n-cursor="projects.open"
+            >
+              <div class="project__top">
+                <span class="project__number">07</span
+                ><span class="project__link" data-i18n="projects.visitSite"
+                  >Besök sidan ↗</span
+                >
+              </div>
+              <div
+                class="project__visual project__visual--hair"
+                aria-hidden="true"
+              >
+                <div class="hair-strands"><i></i><i></i><i></i><i></i></div>
+                <span class="hair-monogram">HI</span>
+                <p>HAIR<br /><em>INTERNATIONAL</em></p>
+                <div class="hair-booking">
+                  <span>SICKLA</span><i></i><strong>TIMMA / ONLINE</strong>
+                </div>
+              </div>
+              <div class="project__body">
+                <div>
+                  <p class="kicker" data-i18n="project10.kicker">
+                    KUNDPROJEKT · SALONG
+                  </p>
+                  <h3>Hair International Sickla</h3>
+                </div>
+                <p data-i18n="project10.description">
+                  En bilddriven och responsiv webbplats för en frisörsalong i
+                  Sickla. Jag skapade ett tydligt flöde från tjänster och team
+                  till galleri, kontakt och onlinebokning via Timma.
+                </p>
+              </div>
+              <ul class="tags">
+                <li>PHP</li>
+                <li>JavaScript</li>
+                <li data-i18n="projects.responsive">Responsiv design</li>
+                <li>Timma</li>
               </ul>
             </a>
           </article>
@@ -728,7 +789,7 @@
               data-i18n-cursor="projects.open"
             >
               <div class="project__top">
-                <span class="project__number">07</span
+                <span class="project__number">08</span
                 ><span class="project__link" data-i18n="projects.openProject"
                   >Öppna projekt ↗</span
                 >
@@ -774,7 +835,7 @@
               data-i18n-cursor="projects.open"
             >
               <div class="project__top">
-                <span class="project__number">08</span
+                <span class="project__number">09</span
                 ><span class="project__link" data-i18n="projects.openProject"
                   >Öppna projekt ↗</span
                 >
@@ -823,7 +884,7 @@
               data-i18n-cursor="projects.open"
             >
               <div class="project__top">
-                <span class="project__number">09</span
+                <span class="project__number">10</span
                 ><span class="project__link" data-i18n="projects.openProject"
                   >Öppna projekt ↗</span
                 >

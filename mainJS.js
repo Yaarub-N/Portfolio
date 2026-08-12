@@ -33,15 +33,10 @@ const footerContent = document.querySelector("footer");
 const chapterRail = document.querySelector("[data-chapter-rail]");
 const chapterLinks = [...document.querySelectorAll("[data-chapter-link]")];
 const commandTrigger = document.querySelector("[data-command-open]");
-const commandShortcut = document.querySelector("[data-command-shortcut]");
 const commandDialog = document.querySelector("[data-command-dialog]");
 const commandCloseButton = document.querySelector("[data-command-close]");
-const commandSearch = document.querySelector("[data-command-search]");
 const commandResults = document.querySelector("[data-command-results]");
-const commandStatus = document.querySelector("[data-command-status]");
-
-const platformName = navigator.userAgentData?.platform ?? navigator.platform ?? "";
-if (/mac/i.test(platformName)) commandShortcut.textContent = "⌘ K";
+const commandCount = document.querySelector(".command-trigger__count");
 
 document.querySelector("[data-year]").textContent = new Date().getFullYear();
 try {
@@ -154,7 +149,6 @@ const commandItems = [
     labelKey: "chapter.top",
     detailKey: "command.sectionStartDetail",
     href: "#top",
-    keywords: "start hero intro presentation developer utvecklare",
   },
   {
     group: "sections",
@@ -162,7 +156,6 @@ const commandItems = [
     labelKey: "nav.projects",
     detailKey: "command.sectionProjectsDetail",
     href: "#projects",
-    keywords: "projects projekt work portfolio case",
   },
   {
     group: "sections",
@@ -170,7 +163,6 @@ const commandItems = [
     labelKey: "nav.about",
     detailKey: "command.sectionAboutDetail",
     href: "#about",
-    keywords: "about om mig background bakgrund learn språk language",
   },
   {
     group: "sections",
@@ -178,7 +170,6 @@ const commandItems = [
     labelKey: "chapter.process",
     detailKey: "command.sectionProcessDetail",
     href: "#process",
-    keywords: "process arbetssätt workflow method metod",
   },
   {
     group: "sections",
@@ -186,7 +177,6 @@ const commandItems = [
     labelKey: "nav.experience",
     detailKey: "command.sectionExperienceDetail",
     href: "#experience",
-    keywords: "experience erfarenhet education utbildning internship praktik",
   },
   {
     group: "sections",
@@ -194,7 +184,6 @@ const commandItems = [
     labelKey: "chapter.toolkit",
     detailKey: "command.sectionToolkitDetail",
     href: "#toolkit",
-    keywords: "technology teknik stack tools verktyg c# asp.net dotnet api backend frontend integration react typescript azure",
   },
   {
     group: "sections",
@@ -202,7 +191,6 @@ const commandItems = [
     labelKey: "chapter.contact",
     detailKey: "command.sectionContactDetail",
     href: "#contact",
-    keywords: "contact kontakt email mejl linkedin github",
   },
   {
     group: "projects",
@@ -211,7 +199,6 @@ const commandItems = [
     detailKey: "command.projectCreaCvDetail",
     href: "https://staging.creacv.net/",
     external: true,
-    keywords: "nextjs typescript openai ai saas pdf cv",
   },
   {
     group: "projects",
@@ -220,7 +207,6 @@ const commandItems = [
     detailKey: "command.projectClimbDetail",
     href: "https://eskilstunaklatterklubb.se/",
     external: true,
-    keywords: "umbraco dotnet swish climbing klättring integration",
   },
   {
     group: "projects",
@@ -229,16 +215,22 @@ const commandItems = [
     detailKey: "command.projectSkinDetail",
     href: "https://pureskinlab.se/",
     external: true,
-    keywords: "client kund website webb responsive skin hud",
   },
   {
     group: "projects",
     mark: "06",
-    label: "Nordic Axis",
-    detailKey: "command.projectAxisDetail",
-    href: "https://www.nordicaxiskiropraktik.se/",
+    label: "Dala Hälsan",
+    detailKey: "command.projectDalaDetail",
+    href: "https://dalahalsankiropraktik.se/",
     external: true,
-    keywords: "client kund website webb chiropractic kiropraktik responsive",
+  },
+  {
+    group: "projects",
+    mark: "07",
+    label: "Hair International Sickla",
+    detailKey: "command.projectHairDetail",
+    href: "https://hairinternationalsickla.se/",
+    external: true,
   },
   {
     group: "actions",
@@ -247,7 +239,6 @@ const commandItems = [
     detailKey: "command.actionCvDetail",
     href: "cv/yaarub-nassr-cv.pdf",
     download: true,
-    keywords: "cv resume meritförteckning download ladda ner pdf",
   },
   {
     group: "actions",
@@ -255,7 +246,6 @@ const commandItems = [
     labelKey: "command.actionEmail",
     detailKey: "command.actionEmailDetail",
     href: "mailto:yaarubnassr@gmail.com",
-    keywords: "email mejl contact kontakt message meddelande",
   },
   {
     group: "actions",
@@ -263,9 +253,10 @@ const commandItems = [
     labelKey: "command.actionLanguage",
     detailKey: "command.actionLanguageDetail",
     action: "language",
-    keywords: "language språk english engelska swedish svenska",
   },
 ];
+
+if (commandCount) commandCount.textContent = String(commandItems.length);
 
 const commandGroupLabels = {
   sections: "command.groupSections",
@@ -275,13 +266,6 @@ const commandGroupLabels = {
 
 let lastCommandTrigger = commandTrigger;
 let restoreCommandFocus = true;
-
-function normalizeSearchValue(value) {
-  return value
-    .toLocaleLowerCase(currentLanguage)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
-}
 
 function getCommandItemLabel(item) {
   return item.labelKey ? translate(item.labelKey) : item.label;
@@ -325,26 +309,16 @@ function createCommandItem(item) {
       event.preventDefault();
       applyLanguage(currentLanguage === "sv" ? "en" : "sv", { announce: true });
     }
-    closeCommandPalette(false);
+    const keepsFocusInPage = item.href?.startsWith("#") || item.action === "language";
+    closeCommandPalette(!keepsFocusInPage);
   });
   return control;
 }
 
-function renderCommandResults(query = "") {
-  const normalizedQuery = normalizeSearchValue(query.trim());
-  const matches = commandItems.filter((item) => {
-    if (!normalizedQuery) return true;
-    const searchableText = [
-      getCommandItemLabel(item),
-      translate(item.detailKey),
-      item.keywords,
-    ].join(" ");
-    return normalizeSearchValue(searchableText).includes(normalizedQuery);
-  });
-
+function renderCommandResults() {
   commandResults.replaceChildren();
   Object.keys(commandGroupLabels).forEach((groupName) => {
-    const groupItems = matches.filter((item) => item.group === groupName);
+    const groupItems = commandItems.filter((item) => item.group === groupName);
     if (!groupItems.length) return;
 
     const group = document.createElement("section");
@@ -358,14 +332,6 @@ function renderCommandResults(query = "") {
     group.append(label, items);
     commandResults.append(group);
   });
-
-  if (!matches.length) {
-    const empty = document.createElement("p");
-    empty.className = "command-empty";
-    empty.textContent = translate("command.noResults");
-    commandResults.append(empty);
-  }
-  commandStatus.textContent = formatTranslation("command.results", { count: matches.length });
 }
 
 function openCommandPalette(trigger = commandTrigger) {
@@ -373,10 +339,11 @@ function openCommandPalette(trigger = commandTrigger) {
   lastCommandTrigger = trigger;
   restoreCommandFocus = true;
   document.body.classList.add("command-open");
-  commandSearch.value = "";
   renderCommandResults();
   commandDialog.showModal();
-  requestAnimationFrame(() => commandSearch.focus({ preventScroll: true }));
+  requestAnimationFrame(() => {
+    commandResults.querySelector("[data-command-item]")?.focus({ preventScroll: true });
+  });
 }
 
 function closeCommandPalette(restoreFocus = true) {
@@ -400,14 +367,6 @@ commandDialog.addEventListener("close", () => {
   const focusTarget = mobileMenuQuery.matches ? menuButton : desktopFocusTarget;
   focusTarget?.focus({ preventScroll: true });
 });
-commandSearch.addEventListener("input", () => renderCommandResults(commandSearch.value));
-commandSearch.addEventListener("keydown", (event) => {
-  if (event.key !== "ArrowDown") return;
-  const firstResult = commandResults.querySelector("[data-command-item]");
-  if (!firstResult) return;
-  event.preventDefault();
-  firstResult.focus();
-});
 commandResults.addEventListener("keydown", (event) => {
   if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
   const resultItems = [...commandResults.querySelectorAll("[data-command-item]")];
@@ -421,16 +380,6 @@ commandResults.addEventListener("keydown", (event) => {
   if (event.key === "End") nextIndex = resultItems.length - 1;
   resultItems[nextIndex].focus();
 });
-document.addEventListener("keydown", (event) => {
-  if (event.key.toLocaleLowerCase() !== "k" || (!event.ctrlKey && !event.metaKey)) return;
-  event.preventDefault();
-  if (commandDialog.open) {
-    closeCommandPalette();
-  } else {
-    openCommandPalette(document.activeElement);
-  }
-});
-
 const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -824,7 +773,6 @@ const translatedAttributes = [
   ["data-i18n-alt", "alt"],
   ["data-i18n-content", "content"],
   ["data-i18n-cursor", "data-cursor"],
-  ["data-i18n-placeholder", "placeholder"],
 ];
 
 function applyLanguage(language, { persist = true, announce = false } = {}) {
@@ -855,7 +803,7 @@ function applyLanguage(language, { persist = true, announce = false } = {}) {
   heroFocusCopy.textContent = translate(`hero.focus.${activeHeroFocus}`);
   updateProjectFilterCounts();
   updateProjectStatus();
-  if (commandDialog.open) renderCommandResults(commandSearch.value);
+  if (commandDialog.open) renderCommandResults();
 
   const activeStackTab = document.querySelector("[data-stack-tab][aria-selected='true']") ?? stackTabs[0];
   selectStack(activeStackTab);
