@@ -395,6 +395,10 @@ document.querySelectorAll(".reveal").forEach((element, index) => {
   if (element.closest(".hero")) {
     const baseDelay = introWasSeen ? 0.05 : 0.78;
     element.style.transitionDelay = `${baseDelay + index * 0.07}s`;
+    // Hero content is already above the fold. Mark it ready immediately so
+    // clipped elements (notably the H1) cannot deadlock the observer.
+    element.classList.add("in-view");
+    return;
   }
   revealObserver.observe(element);
 });
@@ -428,6 +432,7 @@ function setActiveChapter(sectionId) {
   );
   const progress = chapterLinks.length > 1 ? activeIndex / (chapterLinks.length - 1) : 0;
   chapterRail.style.setProperty("--chapter-progress", String(progress));
+  chapterRail.classList.toggle("is-at-top", sectionId === "top");
   chapterRail.classList.toggle("is-on-light", sectionId === "toolkit");
 }
 

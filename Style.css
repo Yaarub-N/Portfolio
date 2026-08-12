@@ -542,6 +542,9 @@
     min-width: 0;
     padding-top: 2rem;
   }
+  .hero > .hero__copy > .kicker {
+    font-size: clamp(0.82rem, 0.9vw, 1rem);
+  }
   .hero h1 {
     max-width: 100%;
     margin: 1.4rem 0 2.2rem;
@@ -767,7 +770,7 @@
   .tech-map {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.32fr);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: clamp(2.5rem, 6vw, 7rem);
     padding: clamp(4.5rem, 8vw, 7.5rem) var(--pad);
     overflow: hidden;
@@ -793,6 +796,10 @@
     max-width: 12ch;
     margin-top: 1rem;
     font-size: clamp(2.45rem, 4.8vw, 5.8rem);
+  }
+  .tech-map__heading h2 em {
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   .tech-map__heading > p:last-child {
     max-width: 32rem;
@@ -2755,6 +2762,12 @@
         visibility 0.2s ease,
         transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .chapter-rail.is-at-top {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(0.5rem);
+    }
     .chapter-rail__track,
     .chapter-rail a {
       display: none;
@@ -2789,6 +2802,9 @@
       grid-template-columns: 1fr;
       padding-top: 9rem;
       padding-bottom: 7rem;
+    }
+    .hero > .hero__copy > .kicker {
+      font-size: 0.72rem;
     }
     .hero__copy {
       width: 100%;
@@ -2878,9 +2894,15 @@
     }
     .hero {
       min-height: auto;
-      gap: 2.5rem;
+      gap: 2rem;
+      padding-top: 7.25rem;
+      padding-bottom: 5.5rem;
+    }
+    .hero__copy {
+      padding-top: 0;
     }
     .hero h1 {
+      margin: 1.1rem 0 1.5rem;
       font-size: clamp(2.7rem, 12vw, 4.7rem);
       line-height: 1;
     }
@@ -2893,12 +2915,13 @@
       align-items: flex-start;
       flex-direction: column;
       gap: 1.2rem;
+      margin-top: 1.6rem;
     }
     .hero__visual {
       width: 100%;
       max-width: 34rem;
       justify-self: center;
-      margin-inline: auto;
+      margin: 0 auto;
     }
     .portrait-wrap {
       aspect-ratio: 1154 / 961;
