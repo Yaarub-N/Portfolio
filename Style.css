@@ -1088,11 +1088,13 @@
     background: #eaf7f4;
   }
   .creacv-illustration {
+    display: block;
     width: 100%;
     height: 100%;
     min-height: inherit;
     object-fit: cover;
     object-position: center;
+    pointer-events: none;
     transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .project--featured:hover .creacv-illustration {
@@ -1378,6 +1380,7 @@
     letter-spacing: 0.3em;
   }
   .project__visual--dala {
+    padding: clamp(1.5rem, 4vw, 3.5rem);
     background:
       radial-gradient(
         circle at 50% 80%,
@@ -1386,6 +1389,18 @@
       ),
       linear-gradient(145deg, #ecf6f4, #cfe4df);
     color: #123a39;
+  }
+  .dala-logo {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 36rem);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 26px rgba(6, 28, 32, 0.12));
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .project:hover .dala-logo {
+    transform: scale(1.025);
   }
   .dala-contours {
     position: absolute;
@@ -1444,16 +1459,27 @@
     min-height: 30rem;
   }
   .project__visual--hair {
-    align-items: flex-start;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
     padding: clamp(2rem, 5vw, 4.5rem);
     background:
-      linear-gradient(90deg, rgba(6, 28, 32, 0.11) 1px, transparent 1px),
-      linear-gradient(rgba(6, 28, 32, 0.11) 1px, transparent 1px),
-      linear-gradient(145deg, #dbe9ec, #a8cdd4);
+      radial-gradient(circle at 50% 44%, rgba(211, 175, 92, 0.13), transparent 32%),
+      linear-gradient(90deg, rgba(237, 246, 247, 0.035) 1px, transparent 1px),
+      linear-gradient(rgba(237, 246, 247, 0.035) 1px, transparent 1px),
+      linear-gradient(145deg, #0b282e, #04171b);
     background-size: 48px 48px;
-    color: #061c20;
-    text-align: left;
+  }
+  .hair-logo {
+    position: relative;
+    z-index: 1;
+    width: min(82%, 40rem);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.32));
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .project--client-feature:hover .hair-logo {
+    transform: scale(1.025);
   }
   .hair-strands {
     position: absolute;

@@ -454,6 +454,79 @@ const sectionObserver = new IntersectionObserver(
 sections.forEach((section) => sectionObserver.observe(section));
 
 if (!reducedMotion && window.matchMedia("(pointer: fine)").matches) {
+  const creacvIllustration = document.querySelector("[data-creacv-illustration]");
+  const creacvVisual = creacvIllustration?.closest(".project__visual--creacv");
+  let creacvPupils = [];
+  let creacvPointerFrame = 0;
+  let creacvPointerPosition = null;
+
+  function collectCreacvPupils() {
+    try {
+      const svgDocument = creacvIllustration?.contentDocument;
+      if (!svgDocument) return;
+      creacvPupils = [...svgDocument.querySelectorAll(".auth-hero-pupil")].map(
+        (pupil) => ({
+          element: pupil,
+          x: Number(pupil.getAttribute("cx")),
+          y: Number(pupil.getAttribute("cy")),
+        }),
+      );
+      creacvPupils.forEach(({ element }) => {
+        element.style.transformBox = "fill-box";
+        element.style.transformOrigin = "center";
+        element.style.transition = "transform 90ms ease-out";
+      });
+    } catch (_) {
+      creacvPupils = [];
+    }
+  }
+
+  function resetCreacvPupils() {
+    creacvPointerPosition = null;
+    if (creacvPointerFrame) cancelAnimationFrame(creacvPointerFrame);
+    creacvPointerFrame = 0;
+    creacvPupils.forEach(({ element }) => {
+      element.style.transform = "translate(0, 0)";
+    });
+  }
+
+  function updateCreacvPupils() {
+    creacvPointerFrame = 0;
+    if (!creacvPointerPosition || !creacvIllustration || !creacvPupils.length) return;
+    const illustrationRect = creacvIllustration.getBoundingClientRect();
+    const viewBox = { x: -150, y: 40, width: 1420, height: 560 };
+    const illustrationScale = Math.max(
+      illustrationRect.width / viewBox.width,
+      illustrationRect.height / viewBox.height,
+    );
+    const renderedWidth = viewBox.width * illustrationScale;
+    const renderedHeight = viewBox.height * illustrationScale;
+    const renderedLeft = illustrationRect.left + (illustrationRect.width - renderedWidth) / 2;
+    const renderedTop = illustrationRect.top + (illustrationRect.height - renderedHeight) / 2;
+
+    creacvPupils.forEach(({ element, x, y }) => {
+      const eyeX = renderedLeft + (x - viewBox.x) * illustrationScale;
+      const eyeY = renderedTop + (y - viewBox.y) * illustrationScale;
+      const deltaX = creacvPointerPosition.x - eyeX;
+      const deltaY = creacvPointerPosition.y - eyeY;
+      const distance = Math.hypot(deltaX, deltaY) || 1;
+      const travel = Math.min(4.8, distance / 18);
+      const offsetX = (deltaX / distance) * travel;
+      const offsetY = (deltaY / distance) * travel;
+      element.style.transform = `translate(${offsetX.toFixed(2)}px, ${offsetY.toFixed(2)}px)`;
+    });
+  }
+
+  creacvIllustration?.addEventListener("load", collectCreacvPupils);
+  collectCreacvPupils();
+  creacvVisual?.addEventListener("pointermove", (event) => {
+    creacvPointerPosition = { x: event.clientX, y: event.clientY };
+    if (!creacvPointerFrame) {
+      creacvPointerFrame = requestAnimationFrame(updateCreacvPupils);
+    }
+  });
+  creacvVisual?.addEventListener("pointerleave", resetCreacvPupils);
+
   window.addEventListener(
     "pointermove",
     (event) => {

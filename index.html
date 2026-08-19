@@ -33,9 +33,9 @@
           document.documentElement.classList.add("intro-seen");
       } catch (_) {}
     </script>
-    <link rel="stylesheet" href="Style.css?v=20260820" />
+    <link rel="stylesheet" href="Style.css?v=20260820-3" />
     <script src="i18n.js" defer></script>
-    <script src="mainJS.js?v=20260813" defer></script>
+    <script src="mainJS.js?v=20260820-2" defer></script>
     <title data-i18n="meta.title">Yaarub Nassr · Fullstackutvecklare</title>
   </head>
   <body>
@@ -452,15 +452,14 @@
                 class="project__visual project__visual--creacv"
                 aria-hidden="true"
               >
-                <img
+                <object
                   class="creacv-illustration"
-                  src="bilder/creacv-illustration.svg"
-                  alt=""
-                  width="1420"
-                  height="560"
-                  loading="lazy"
-                  decoding="async"
-                />
+                  data="bilder/creacv-illustration.svg"
+                  type="image/svg+xml"
+                  role="presentation"
+                  tabindex="-1"
+                  data-creacv-illustration
+                ></object>
               </div>
               <div class="project__body">
                 <div>
@@ -683,10 +682,15 @@
                 class="project__visual project__visual--dala"
                 aria-hidden="true"
               >
-                <div class="dala-contours"><i></i><i></i><i></i></div>
-                <span class="dala-place">FALUN / 60.6065° N</span>
-                <p>DALA<br /><strong>HÄLSAN</strong></p>
-                <span data-i18n="project6.visual">KIROPRAKTIK · KADDIO</span>
+                <img
+                  class="dala-logo"
+                  src="bilder/dala-logo-header.webp"
+                  alt=""
+                  width="960"
+                  height="320"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div class="project__body">
                 <div>
@@ -734,12 +738,15 @@
                 class="project__visual project__visual--hair"
                 aria-hidden="true"
               >
-                <div class="hair-strands"><i></i><i></i><i></i><i></i></div>
-                <span class="hair-monogram">HI</span>
-                <p>HAIR<br /><em>INTERNATIONAL</em></p>
-                <div class="hair-booking">
-                  <span>SICKLA</span><i></i><strong>TIMMA / ONLINE</strong>
-                </div>
+                <img
+                  class="hair-logo"
+                  src="bilder/hair-international-logo-480.avif"
+                  alt=""
+                  width="480"
+                  height="288"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div class="project__body">
                 <div>
