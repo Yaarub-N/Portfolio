@@ -1085,16 +1085,18 @@
   }
 
   .project__visual--creacv {
-    display: grid;
-    place-items: end center;
-    padding: 3.8rem 5vw 0;
-    background:
-      radial-gradient(
-        circle at 20% 10%,
-        rgba(85, 181, 199, 0.28),
-        transparent 30%
-      ),
-      linear-gradient(135deg, #126376, #061c20);
+    background: #eaf7f4;
+  }
+  .creacv-illustration {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .project--featured:hover .creacv-illustration {
+    transform: scale(1.012);
   }
   .cv-window {
     width: min(60rem, 100%);
@@ -3028,7 +3030,10 @@
       display: none;
     }
     .project__visual--creacv {
-      padding: 2rem 1.2rem 0;
+      background: #eaf7f4;
+    }
+    .creacv-illustration {
+      object-position: 50% center;
     }
     .cv-window__body {
       height: 17rem;
