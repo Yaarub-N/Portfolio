@@ -637,6 +637,23 @@ const projects = [...document.querySelectorAll(".project[data-category]")];
 const projectStatus = document.querySelector("[data-project-status]");
 let activeProjectFilter = "all";
 
+function fillProjectRows() {
+  let unpairedProject = null;
+  for (const project of projects) {
+    project.classList.remove("project--fill-row");
+    if (project.hidden) continue;
+
+    if (project.classList.contains("project--full-width")) {
+      // Finish the current row before the featured card starts a new one.
+      unpairedProject?.classList.add("project--fill-row");
+      unpairedProject = null;
+    } else {
+      unpairedProject = unpairedProject ? null : project;
+    }
+  }
+  unpairedProject?.classList.add("project--fill-row");
+}
+
 function updateProjectFilterCounts() {
   projectFilterButtons.forEach((button) => {
     const filter = button.dataset.projectFilter;
@@ -659,6 +676,7 @@ function updateProjectStatus() {
   }
 }
 
+fillProjectRows();
 projectFilterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const filter = button.dataset.projectFilter;
@@ -668,6 +686,7 @@ projectFilterButtons.forEach((button) => {
         const visible = filter === "all" || project.dataset.category === filter;
         project.hidden = !visible;
       });
+      fillProjectRows();
       projectFilterButtons.forEach((item) => {
         const active = item === button;
         item.classList.toggle("is-active", active);
