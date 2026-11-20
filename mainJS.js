@@ -25,6 +25,11 @@ const nav = document.querySelector("[data-nav]");
 const menuLinks = [...nav.querySelectorAll("a")];
 const languageButtons = [...document.querySelectorAll("[data-language]")];
 const languageStatus = document.querySelector("[data-language-status]");
+const cvDownload = document.querySelector("[data-cv-download]");
+const cvDownloadPaths = {
+  sv: cvDownload.getAttribute("href"),
+  en: "cv/yaarub-nassr-cv-en.pdf",
+};
 const progressBar = document.querySelector(".page-progress span");
 const mobileMenuQuery = window.matchMedia("(max-width: 900px)");
 const introWasSeen = document.documentElement.classList.contains("intro-seen");
@@ -221,7 +226,7 @@ const commandItems = [
     mark: "06",
     label: "Dala Hälsan",
     detailKey: "command.projectDalaDetail",
-    href: "https://dalahalsankiropraktik.se/",
+    href: "https://www.dalahalsankiropraktik.se/",
     external: true,
   },
   {
@@ -237,7 +242,6 @@ const commandItems = [
     mark: "PDF",
     labelKey: "command.actionCv",
     detailKey: "command.actionCvDetail",
-    href: "cv/yaarub-nassr-cv.pdf",
     download: true,
   },
   {
@@ -272,16 +276,20 @@ function getCommandItemLabel(item) {
 }
 
 function createCommandItem(item) {
-  const control = document.createElement(item.href ? "a" : "button");
+  const href = item.download ? cvDownloadPaths[currentLanguage] : item.href;
+  const control = document.createElement(href ? "a" : "button");
   control.className = "command-item";
   control.dataset.commandItem = "";
-  if (item.href) {
-    control.href = item.href;
+  if (href) {
+    control.href = href;
     if (item.external) {
       control.target = "_blank";
       control.rel = "noreferrer";
     }
-    if (item.download) control.setAttribute("download", "");
+    if (item.download) {
+      control.setAttribute("download", "");
+      control.hreflang = currentLanguage;
+    }
   } else {
     control.type = "button";
   }
@@ -309,7 +317,7 @@ function createCommandItem(item) {
       event.preventDefault();
       applyLanguage(currentLanguage === "sv" ? "en" : "sv", { announce: true });
     }
-    const keepsFocusInPage = item.href?.startsWith("#") || item.action === "language";
+    const keepsFocusInPage = href?.startsWith("#") || item.action === "language";
     closeCommandPalette(!keepsFocusInPage);
   });
   return control;
@@ -402,6 +410,7 @@ document.querySelectorAll(".reveal").forEach((element, index) => {
   }
   revealObserver.observe(element);
 });
+document.documentElement.classList.add("reveal-ready");
 
 const sections = [...document.querySelectorAll("main section[id]")];
 const navLinks = [...document.querySelectorAll(".nav a")];
@@ -857,6 +866,8 @@ function applyLanguage(language, { persist = true, announce = false } = {}) {
   if (!translations[language]) return;
   currentLanguage = language;
   document.documentElement.lang = language;
+  cvDownload.href = cvDownloadPaths[language];
+  cvDownload.hreflang = language;
 
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     element.textContent = translate(element.dataset.i18n);
