@@ -362,7 +362,9 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     cursor: pointer;
-    transition: color 0.2s ease, background 0.2s ease;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
   }
   .language-switcher > span {
     color: var(--dim);
@@ -625,8 +627,9 @@
   .hero__visual {
     position: relative;
     z-index: 3;
-    width: min(100%, 43rem);
-    justify-self: end;
+    top: -7rem;
+    width: min(60%, 43rem);
+    justify-self: anchor-center;
     transform-style: preserve-3d;
   }
   .portrait-wrap {
@@ -735,7 +738,9 @@
   }
   .build-route span.is-active i {
     background: var(--aqua);
-    box-shadow: 0 0 0 0.35rem rgba(85, 181, 199, 0.18), 0 0 1.5rem var(--aqua);
+    box-shadow:
+      0 0 0 0.35rem rgba(85, 181, 199, 0.18),
+      0 0 1.5rem var(--aqua);
     transform: scale(1.12);
   }
   .hero__footer {
@@ -776,7 +781,11 @@
     overflow: hidden;
     border-block: 1px solid var(--line);
     background:
-      radial-gradient(circle at 90% 15%, rgba(85, 181, 199, 0.1), transparent 25rem),
+      radial-gradient(
+        circle at 90% 15%,
+        rgba(85, 181, 199, 0.1),
+        transparent 25rem
+      ),
       rgba(4, 22, 26, 0.72);
   }
   .tech-map::before {
@@ -1493,7 +1502,11 @@
     justify-content: center;
     padding: clamp(2rem, 5vw, 4.5rem);
     background:
-      radial-gradient(circle at 50% 44%, rgba(211, 175, 92, 0.13), transparent 32%),
+      radial-gradient(
+        circle at 50% 44%,
+        rgba(211, 175, 92, 0.13),
+        transparent 32%
+      ),
       linear-gradient(90deg, rgba(237, 246, 247, 0.035) 1px, transparent 1px),
       linear-gradient(rgba(237, 246, 247, 0.035) 1px, transparent 1px),
       linear-gradient(145deg, #0b282e, #04171b);
@@ -1684,7 +1697,11 @@
     overflow: hidden;
     border-top: 1px solid var(--line);
     background:
-      radial-gradient(circle at 12% 80%, rgba(85, 181, 199, 0.09), transparent 28rem),
+      radial-gradient(
+        circle at 12% 80%,
+        rgba(85, 181, 199, 0.09),
+        transparent 28rem
+      ),
       var(--bg);
   }
   .process-workspace {
@@ -1721,7 +1738,8 @@
     box-shadow: 0 35px 90px rgba(0, 0, 0, 0.35);
     opacity: 0;
     pointer-events: none;
-    transform: translate(var(--deck-x), var(--deck-y)) rotate(var(--deck-r)) scale(0.92);
+    transform: translate(var(--deck-x), var(--deck-y)) rotate(var(--deck-r))
+      scale(0.92);
     transform-origin: 50% 110%;
     transition:
       opacity 0.4s ease,
@@ -1736,7 +1754,8 @@
     z-index: 3;
     opacity: 1;
     pointer-events: auto;
-    transform: translate(var(--drag-x, 0px), 0) rotate(var(--drag-r, 0deg)) scale(1);
+    transform: translate(var(--drag-x, 0px), 0) rotate(var(--drag-r, 0deg))
+      scale(1);
   }
   .process-card[data-position="1"] {
     --deck-x: 1.2rem;
@@ -1904,11 +1923,17 @@
   }
   .timeline__item.is-current {
     padding-left: 1.2rem;
-    background: linear-gradient(90deg, rgba(85, 181, 199, 0.07), transparent 45%);
+    background: linear-gradient(
+      90deg,
+      rgba(85, 181, 199, 0.07),
+      transparent 45%
+    );
   }
   .timeline__item.is-current::before {
     background: var(--aqua);
-    box-shadow: 0 0 0 0.4rem rgba(85, 181, 199, 0.12), 0 0 1.2rem var(--aqua);
+    box-shadow:
+      0 0 0 0.4rem rgba(85, 181, 199, 0.12),
+      0 0 1.2rem var(--aqua);
   }
   .timeline__year {
     color: var(--lime);
@@ -2259,7 +2284,11 @@
   }
   .command-palette::backdrop {
     background:
-      radial-gradient(circle at 50% 30%, rgba(85, 181, 199, 0.12), transparent 36rem),
+      radial-gradient(
+        circle at 50% 30%,
+        rgba(85, 181, 199, 0.12),
+        transparent 36rem
+      ),
       rgba(1, 12, 15, 0.78);
     backdrop-filter: blur(8px);
   }
@@ -2709,7 +2738,11 @@
       gap: 0.4rem;
       padding: clamp(5rem, 16vh, 8rem) clamp(1.5rem, 8vw, 4rem);
       background:
-        radial-gradient(circle at 82% 12%, rgba(85, 181, 199, 0.2), transparent 30%),
+        radial-gradient(
+          circle at 82% 12%,
+          rgba(85, 181, 199, 0.2),
+          transparent 30%
+        ),
         linear-gradient(145deg, #061c20, #0a2d34);
       opacity: 0.35;
       visibility: hidden;
